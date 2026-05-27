@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EWS — Employee Warning System | Cognizant</title>
+<style>
+:root {
+  --navy: #000048;
+  --navy-deep: #00002e;
+  --navy-mid: #00006a;
+  --navy-light: #1a1a7e;
+  --cyan: #00b5e2;
+  --cyan-light: #e0f6fd;
+  --cyan-mid: #7dd6ee;
+  --white: #ffffff;
+  --gray-50: #f8f9fc;
+  --gray-100: #f0f2f7;
+  --gray-200: #e2e6ef;
+  --gray-300: #c8cedc;
+  --gray-400: #9ba3b8;
+  --gray-500: #727d96;
+  --gray-600: #5c677d;
+  --gray-700: #3e4a61;
+  --gray-800: #2d3345;
+  --red: #dc2626;
+  --red-light: #ef4444;
+  --red-bg: #fef2f2;
+  --red-border: #fca5a5;
+  --amber: #d97706;
+  --amber-bg: #fffbeb;
+  --amber-border: #fcd34d;
+  --green: #16a34a;
+  --green-bg: #f0fdf4;
+  --green-border: #86efac;
+  --purple: #7c3aed;
+  --purple-bg: #f5f3ff;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.5; }
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── TOP NAV ── */
+.topnav {
+  background: var(--navy);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 8px;
+  position: sticky; top: 0; z-index: 200;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo-mark {
+  width: 30px; height: 30px;
+  background: var(--cyan);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: var(--navy);
+  flex-shrink: 0;
+}
+.nav-logo-text { font-size: 15px; font-weight: 700; color: white; letter-spacing: -0.2px; }
+.nav-logo-text span { color: var(--cyan); }
+.nav-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.12); margin: 0 4px; }
+.nav-links { display: flex; gap: 2px; }
+.nav-btn {
+  padding: 6px 14px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.nav-btn:hover { background: rgba(255,255,255,0.08); color: white; }
+.nav-btn.active { background: rgba(0,181,226,0.2); color: var(--cyan); }
+.nav-spacer { flex: 1; }
+.nav-month {
+  background: rgba(0,181,226,0.15);
+  border: 1px solid rgba(0,181,226,0.35);
+  color: var(--cyan);
+  border-radius: 16px;
+  padding: 3px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.nav-user {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 4px 12px 4px 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.nav-user:hover { background: rgba(255,255,255,0.12); }
+.nav-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  flex-shrink: 0;
+}
+.nav-username { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 500; }
+.nav-role-tag { font-size: 10px; color: rgba(255,255,255,0.45); display: block; line-height: 1; }
+
+/* ── MAIN CONTENT ── */
+.main { flex: 1; padding: 24px 28px; max-width: 1280px; width: 100%; margin: 0 auto; }
+.page-header { margin-bottom: 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.page-title-wrap .page-title { font-size: 20px; font-weight: 800; color: var(--navy); letter-spacing: -0.4px; }
+.page-title-wrap .page-sub { font-size: 13px; color: var(--gray-500); margin-top: 3px; }
+.page-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+/* ── KPI GRID ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 22px; }
+.kpi-card {
+  background: white;
+  border-radius: 14px;
+  border: 1.5px solid var(--gray-200);
+  padding: 18px 16px 14px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,72,0.09); border-color: var(--cyan); }
+.kpi-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; }
+.kpi-acc-navy { background: var(--navy); }
+.kpi-acc-red { background: linear-gradient(90deg, var(--red), #f87171); }
+.kpi-acc-amber { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+.kpi-acc-green { background: linear-gradient(90deg, var(--green), #4ade80); }
+.kpi-acc-cyan { background: linear-gradient(90deg, var(--cyan), #38bdf8); }
+.kpi-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gray-500); margin-bottom: 8px; }
+.kpi-value { font-size: 30px; font-weight: 800; color: var(--navy); line-height: 1; letter-spacing: -1px; }
+.kpi-sub { font-size: 11px; color: var(--gray-400); margin-top: 5px; }
+.kpi-trend { position: absolute; right: 14px; bottom: 12px; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 8px; }
+.trend-up { background: var(--green-bg); color: var(--green); }
+.trend-down { background: var(--red-bg); color: var(--red); }
+.trend-neutral { background: var(--gray-100); color: var(--gray-500); }
+
+/* ── CARDS / SECTIONS ── */
+.card {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.card-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-title { font-size: 13.5px; font-weight: 700; color: var(--navy); }
+.card-header-actions { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+.card-body { padding: 0; }
+
+/* ── GRID LAYOUTS ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* ── TABLE ── */
+.tbl-wrap { overflow-x: auto; }
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+.tbl th {
+  background: var(--gray-50);
+  padding: 9px 16px;
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-500);
+  border-bottom: 1.5px solid var(--gray-200);
+}
+.tbl td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 13px;
+  color: var(--gray-800);
+  vertical-align: middle;
+}
+.tbl tbody tr { cursor: pointer; transition: background 0.1s; }
+.tbl tbody tr:hover { background: #f4f6fb; }
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl code { font-family: 'Consolas','SF Mono',monospace; font-size: 11px; background: var(--gray-100); padding: 1px 5px; border-radius: 4px; color: var(--navy-mid); }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+.b-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.b-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.b-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.b-navy { background: var(--navy); color: white; }
+.b-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.b-gray { background: var(--gray-100); color: var(--gray-600); border: 1px solid var(--gray-300); }
+.b-cyan { background: var(--cyan-light); color: var(--navy-mid); border: 1px solid #7dd6ee; }
+.b-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid #c4b5fd; }
+.b-dot::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.b-red.b-dot::before { background: var(--red); }
+.b-amber.b-dot::before { background: var(--amber); }
+.b-green.b-dot::before { background: var(--green); }
+.b-gray.b-dot::before { background: var(--gray-400); }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--navy); color: white; }
+.btn-primary:not(:disabled):hover { background: var(--navy-mid); }
+.btn-cyan { background: var(--cyan); color: var(--navy); }
+.btn-cyan:not(:disabled):hover { background: var(--cyan-mid); }
+.btn-ghost { background: white; color: var(--gray-700); border: 1.5px solid var(--gray-200); }
+.btn-ghost:not(:disabled):hover { background: var(--gray-50); border-color: var(--gray-300); }
+.btn-red { background: var(--red); color: white; }
+.btn-red:not(:disabled):hover { background: #b91c1c; }
+.btn-green { background: var(--green); color: white; }
+.btn-sm { padding: 5px 11px; font-size: 12px; border-radius: 7px; }
+.btn-xs { padding: 3px 8px; font-size: 11px; border-radius: 6px; }
+.btn-icon { width: 32px; height: 32px; padding: 0; border-radius: 8px; justify-content: center; font-size: 14px; }
+
+/* ── FORM ELEMENTS ── */
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-600); }
+.form-label .req { color: var(--red); }
+.form-input, .form-select, .form-textarea {
+  padding: 8px 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--gray-800);
+  background: white;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  width: 100%;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(0,181,226,0.12);
+}
+.form-input[readonly], .form-input:disabled, .form-select:disabled {
+  background: var(--gray-50); color: var(--gray-600); cursor: default;
+}
+.form-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.form-row { display: flex; gap: 14px; }
+.form-row .form-group { flex: 1; }
+
+/* ── TOGGLE ── */
+.toggle-wrap { display: flex; align-items: center; gap: 10px; }
+.toggle-switch {
+  position: relative; width: 42px; height: 24px;
+  background: var(--gray-300);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+  flex-shrink: 0;
+}
+.toggle-switch.on { background: var(--cyan); }
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle-switch.on::after { transform: translateX(18px); }
+.toggle-label { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+.toggle-sub { font-size: 11px; color: var(--gray-500); margin-top: 1px; }
+
+/* ── RADIO SCORE ── */
+.factor-group-title {
+  font-size: 10.5px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--navy);
+  padding: 8px 0 6px;
+  border-bottom: 2px solid var(--cyan);
+  margin-bottom: 2px;
+  display: flex; align-items: center; gap: 8px;
+}
+.factor-row {
+  display: flex; align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--gray-100);
+  gap: 10px;
+}
+.factor-row:last-child { border-bottom: none; }
+.factor-name { flex: 1; font-size: 13px; color: var(--gray-800); }
+.factor-tag { font-size: 10px; font-weight: 700; background: var(--cyan-light); color: var(--navy-mid); border-radius: 10px; padding: 1px 7px; margin-left: 6px; }
+.score-radios { display: flex; gap: 5px; }
+.score-radio { display: none; }
+.score-radio-label {
+  display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 30px;
+  border-radius: 7px;
+  border: 1.5px solid var(--gray-200);
+  cursor: pointer;
+  font-size: 12px; font-weight: 800;
+  color: var(--gray-500);
+  transition: all 0.15s;
+  user-select: none;
+}
+.score-radio-label:hover { border-color: var(--gray-400); color: var(--gray-700); background: var(--gray-50); }
+.score-radio.s1:checked + .score-radio-label { background: var(--red); border-color: var(--red); color: white; }
+.score-radio.s3:checked + .score-radio-label { background: var(--amber); border-color: var(--amber); color: white; }
+.score-radio.s5:checked + .score-radio-label { background: var(--green); border-color: var(--green); color: white; }
+
+/* ── FILTERS BAR ── */
+.filters-bar {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+}
+.search-input-wrap {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--gray-50);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 6px 12px;
+  flex: 1; min-width: 200px;
+  transition: border-color 0.15s;
+}
+.search-input-wrap:focus-within { border-color: var(--cyan); }
+.search-input-wrap input {
+  border: none; background: transparent; font-size: 13px;
+  font-family: inherit; color: var(--gray-800); outline: none; flex: 1;
+}
+.search-icon { color: var(--gray-400); font-size: 14px; flex-shrink: 0; }
+
+/* ── PROGRESS ── */
+.progress-bar { background: var(--gray-200); border-radius: 6px; height: 6px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 6px; background: var(--cyan); transition: width 0.4s; }
+.prog-perf { background: var(--navy); }
+.prog-beh { background: var(--cyan); }
+
+/* ── SIDEBAR EMPLOYEE CARD ── */
+.emp-card {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.emp-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(0,181,226,0.1);
+}
+.emp-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: -10px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.emp-card-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; position: relative; z-index: 1; }
+.emp-card-meta { font-size: 11.5px; color: rgba(255,255,255,0.6); line-height: 1.9; position: relative; z-index: 1; }
+.emp-card-meta strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+.emp-card-badge {
+  display: inline-block;
+  background: rgba(0,181,226,0.2);
+  border: 1px solid rgba(0,181,226,0.4);
+  color: var(--cyan);
+  padding: 2px 9px; border-radius: 20px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+  margin-top: 10px; position: relative; z-index: 1;
+}
+
+/* ── SCORE SIDEBAR ── */
+.score-box {
+  background: var(--gray-50);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.score-box-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gray-500); margin-bottom: 6px; }
+.score-box-value { font-size: 48px; font-weight: 900; line-height: 1; letter-spacing: -2px; }
+.score-box-status { margin-top: 6px; }
+.score-box-logic { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--gray-200); font-size: 11px; color: var(--gray-500); line-height: 1.8; text-align: left; }
+
+/* ── TIMELINE ── */
+.timeline { position: relative; padding-left: 20px; }
+.timeline::before { content: ''; position: absolute; left: 5px; top: 4px; bottom: 4px; width: 1.5px; background: var(--gray-200); }
+.tl-item { position: relative; padding-bottom: 16px; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -18px; top: 3px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: 2.5px solid white;
+  box-shadow: 0 0 0 1.5px var(--cyan);
+  background: var(--cyan);
+}
+.tl-dot.red { background: var(--red); box-shadow: 0 0 0 1.5px var(--red); }
+.tl-dot.amber { background: var(--amber); box-shadow: 0 0 0 1.5px var(--amber); }
+.tl-dot.green { background: var(--green); box-shadow: 0 0 0 1.5px var(--green); }
+.tl-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+.tl-meta { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
+.tl-body { font-size: 12px; color: var(--gray-600); margin-top: 4px; line-height: 1.6; }
+
+/* ── PENDING LIST ── */
+.pending-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 20px;
+  border-bottom: 1px solid var(--gray-100);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.pending-item:last-child { border-bottom: none; }
+.pending-item:hover { background: var(--gray-50); }
+.p-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0;
+}
+.p-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+.p-meta { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
+
+/* ── ALERT BANNER ── */
+.alert-banner {
+  border-radius: 10px;
+  padding: 11px 16px;
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-bottom: 14px;
+}
+.alert-amber { background: #fff8ed; border: 1px solid var(--amber-border); }
+.alert-red { background: var(--red-bg); border: 1px solid var(--red-border); }
+.alert-green { background: var(--green-bg); border: 1px solid var(--green-border); }
+.alert-blue { background: #eff6ff; border: 1px solid #bfdbfe; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert-title { font-size: 13px; font-weight: 700; }
+.alert-amber .alert-title { color: var(--amber); }
+.alert-red .alert-title { color: var(--red); }
+.alert-green .alert-title { color: var(--green); }
+.alert-blue .alert-title { color: #1d4ed8; }
+.alert-body { font-size: 12px; color: var(--gray-600); margin-top: 2px; line-height: 1.5; }
+
+/* ── LOGIN ── */
+#screen-login { flex-direction: row; background: var(--navy); }
+.login-left {
+  flex: 1;
+  position: relative;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 48px;
+  overflow: hidden;
+  min-height: 100vh;
+}
+.login-bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,181,226,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,181,226,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.login-bg-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,181,226,0.12) 0%, transparent 70%);
+  top: -100px; right: -100px;
+}
+.login-bg-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,0,200,0.15) 0%, transparent 70%);
+  bottom: -50px; left: -50px;
+}
+.login-hero { position: relative; z-index: 1; }
+.login-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(0,181,226,0.15);
+  border: 1px solid rgba(0,181,226,0.3);
+  color: var(--cyan);
+  padding: 5px 14px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.login-h1 { font-size: 40px; font-weight: 900; color: white; line-height: 1.15; letter-spacing: -1px; margin-bottom: 14px; }
+.login-h1 span { color: var(--cyan); }
+.login-p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 380px; margin-bottom: 28px; }
+.login-features { display: flex; flex-direction: column; gap: 10px; }
+.login-feat {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: rgba(255,255,255,0.7);
+}
+.login-feat-icon {
+  width: 28px; height: 28px;
+  background: rgba(0,181,226,0.15);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; flex-shrink: 0;
+}
+.login-right {
+  width: 460px; flex-shrink: 0;
+  background: white;
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 44px;
+}
+.login-box { width: 100%; }
+.login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+.login-logo-mark { width: 38px; height: 38px; background: var(--navy); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.login-logo-mark svg { width: 20px; height: 20px; }
+.login-brand { font-size: 18px; font-weight: 800; color: var(--navy); }
+.login-form-title { font-size: 22px; font-weight: 800; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 5px; }
+.login-form-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 26px; }
+.role-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-600); margin-bottom: 10px; }
+.role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 22px; }
+.role-opt {
+  padding: 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.role-opt:hover { border-color: var(--cyan); background: var(--cyan-light); }
+.role-opt.selected { border-color: var(--navy); background: var(--cyan-light); }
+.role-opt-icon { font-size: 20px; margin-bottom: 5px; }
+.role-opt-name { font-size: 12px; font-weight: 700; color: var(--navy); }
+.role-opt-desc { font-size: 10px; color: var(--gray-500); margin-top: 2px; }
+.sso-btn {
+  width: 100%; padding: 13px 16px;
+  background: var(--navy); color: white;
+  border: none; border-radius: 11px;
+  font-size: 14px; font-weight: 700; font-family: inherit;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: all 0.2s;
+  margin-bottom: 14px;
+}
+.sso-btn:hover { background: var(--navy-mid); box-shadow: 0 6px 20px rgba(0,0,72,0.25); transform: translateY(-1px); }
+.sso-ms-icon { width: 22px; height: 22px; background: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--navy); flex-shrink: 0; }
+.login-note { font-size: 11px; color: var(--gray-400); text-align: center; line-height: 1.6; margin-top: 12px; }
+
+/* ── ASSESSMENT LAYOUT ── */
+.assess-layout { display: flex; gap: 20px; align-items: flex-start; }
+.assess-main { flex: 1; min-width: 0; }
+.assess-sidebar { width: 270px; flex-shrink: 0; position: sticky; top: 72px; }
+
+/* ── STEP INDICATOR ── */
+.step-indicator {
+  display: flex; align-items: center; gap: 0;
+  margin-bottom: 20px;
+}
+.step-item { display: flex; align-items: center; gap: 0; }
+.step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+  flex-shrink: 0; transition: all 0.2s;
+}
+.step-dot.done { background: var(--green); color: white; }
+.step-dot.active { background: var(--navy); color: white; }
+.step-dot.todo { background: var(--gray-200); color: var(--gray-500); }
+.step-label { font-size: 11px; font-weight: 600; color: var(--gray-600); margin-left: 6px; white-space: nowrap; }
+.step-label.active { color: var(--navy); font-weight: 700; }
+.step-line { width: 32px; height: 2px; background: var(--gray-200); margin: 0 4px; flex-shrink: 0; }
+.step-line.done { background: var(--green); }
+
+/* ── ADMIN TABS ── */
+.admin-tab-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.admin-tab {
+  background: white;
+  border: 2px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.admin-tab:hover { border-color: var(--cyan); }
+.admin-tab.active { border-color: var(--navy); background: #f4f6ff; }
+.admin-tab-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.admin-tab-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+.admin-tab-sub { font-size: 11px; color: var(--gray-500); margin-top: 3px; }
+
+/* ── UPLOAD ZONE ── */
+.upload-zone {
+  border: 2px dashed var(--gray-300);
+  border-radius: 12px;
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--gray-50);
+}
+.upload-zone:hover { border-color: var(--cyan); background: var(--cyan-light); }
+.upload-zone-icon { font-size: 32px; margin-bottom: 10px; }
+.upload-zone-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+.upload-zone-sub { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
+
+/* ── STACK BARS ── */
+.stack-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.stack-label { font-size: 11px; font-weight: 600; color: var(--gray-600); width: 80px; flex-shrink: 0; }
+.stack-track { flex: 1; height: 8px; background: var(--gray-100); border-radius: 4px; overflow: hidden; }
+.stack-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
+.stack-num { font-size: 13px; font-weight: 800; color: var(--navy); min-width: 18px; }
+
+/* ── HR STATS ── */
+.hr-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.hr-stat-card { background: white; border-radius: 12px; border: 1px solid var(--gray-200); padding: 16px; text-align: center; }
+.hr-stat-val { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+.hr-stat-label { font-size: 11px; color: var(--gray-500); margin-top: 3px; font-weight: 500; }
+
+/* ── MONTH SELECTOR ── */
+.month-selector { display: flex; align-items: center; gap: 6px; }
+.month-nav-btn {
+  width: 28px; height: 28px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 7px;
+  background: white; cursor: pointer;
+  font-size: 14px; font-weight: 700; color: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.month-nav-btn:hover { border-color: var(--cyan); background: var(--cyan-light); }
+.month-display { font-size: 13px; font-weight: 700; color: var(--navy); min-width: 88px; text-align: center; }
+
+/* ── BACK BUTTON ── */
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 600; color: var(--gray-500);
+  font-family: inherit; padding: 0; margin-bottom: 16px;
+  transition: color 0.15s;
+}
+.back-btn:hover { color: var(--navy); }
+
+/* ── NOTIFICATION DOT ── */
+.notif-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--gray-100); margin: 14px 0; }
+
+/* ── CHIP ── */
+.chip { background: var(--cyan-light); color: var(--navy); border-radius: 10px; padding: 2px 8px; font-size: 10.5px; font-weight: 700; }
+
+/* ── COMMENT ROW ── */
+.comment-row { margin-top: 6px; }
+.comment-input-wrap {
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  border-radius: 7px;
+  padding: 6px 10px;
+}
+.comment-req-label { font-size: 10px; font-weight: 700; color: var(--red); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.4px; }
+.comment-input-wrap input {
+  border: none; background: transparent; font-size: 12px;
+  font-family: inherit; color: var(--gray-800); outline: none; width: 100%;
+}
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--navy); color: white;
+  padding: 12px 20px; border-radius: 10px;
+  font-size: 13px; font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,72,0.3);
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0; transform: translateY(12px);
+  transition: all 0.3s;
+  pointer-events: none;
+  max-width: 320px;
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── HISTORY ITEM ── */
+.hist-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--gray-100); font-size: 12px; }
+.hist-row:last-child { border-bottom: none; }
+
+/* ── OVERDUE ALERT ── */
+.overdue-strip {
+  background: #fff4e0; border-left: 3px solid var(--amber);
+  border-radius: 0 8px 8px 0; padding: 9px 14px; margin-bottom: 8px;
+}
+.overdue-title { font-size: 12px; font-weight: 700; color: var(--amber); }
+.overdue-body { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
+
+/* ── FLOW DIAGRAM ── */
+.flow-box {
+  background: white; border: 1.5px solid var(--gray-200);
+  border-radius: 10px; padding: 14px 16px;
+  font-size: 12px;
+}
+.flow-title { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.flow-sub { font-size: 11px; color: var(--gray-500); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+
+/* responsive */
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .assess-layout { flex-direction: column; }
+  .assess-sidebar { width: 100%; position: static; }
+  .login-left { display: none; }
+  .login-right { width: 100%; }
+  .hr-stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .admin-tab-row { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════ -->
+<div id="screen-login" class="screen active">
+  <div class="login-left">
+    <div class="login-bg-grid"></div>
+    <div class="login-bg-glow"></div>
+    <div class="login-bg-glow2"></div>
+    <div class="login-hero">
+      <div class="login-eyebrow">
+        <span>🛡️</span> EWS Platform v2.4
+      </div>
+      <h1 class="login-h1">Employee<br><span>Warning System</span></h1>
+      <p class="login-p">Proactively identify and address attrition risk signals. Monthly scoring, HR interventions, and leadership visibility — all in one platform.</p>
+      <div class="login-features">
+        <div class="login-feat"><div class="login-feat-icon">📊</div>Monthly risk scoring with 1:1 gating</div>
+        <div class="login-feat"><div class="login-feat-icon">🤝</div>HR intervention tracking & closure</div>
+        <div class="login-feat"><div class="login-feat-icon">🔔</div>Automated reminders & escalations</div>
+        <div class="login-feat"><div class="login-feat-icon">🔒</div>Role-based access via Azure AD SSO</div>
+      </div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-logo-mark">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#00b5e2" stroke-width="2"/><path d="M6 10h8M10 6v8" stroke="#00b5e2" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <span class="login-brand">Cognizant · EWS</span>
+      </div>
+      <div class="login-form-title">Welcome back</div>
+      <div class="login-form-sub">Sign in with your Cognizant corporate account</div>
+      <div class="role-section-label">Select your role to demo</div>
+      <div class="role-grid">
+        <div class="role-opt selected" data-role="manager" onclick="selectRole(this)">
+          <div class="role-opt-icon">👤</div>
+          <div class="role-opt-name">People Manager</div>
+          <div class="role-opt-desc">TL / TM / SDM / DGM</div>
+        </div>
+        <div class="role-opt" data-role="hr" onclick="selectRole(this)">
+          <div class="role-opt-icon">🩺</div>
+          <div class="role-opt-name">HR SPOC</div>
+          <div class="role-opt-desc">Interventions & Actions</div>
+        </div>
+        <div class="role-opt" data-role="admin" onclick="selectRole(this)">
+          <div class="role-opt-icon">⚙️</div>
+          <div class="role-opt-name">Admin</div>
+          <div class="role-opt-desc">Config & Master Data</div>
+        </div>
+        <div class="role-opt" data-role="leadership" onclick="selectRole(this)">
+          <div class="role-opt-icon">📈</div>
+          <div class="role-opt-name">Leadership</div>
+          <div class="role-opt-desc">Read-only Analytics</div>
+        </div>
+      </div>
+      <button class="sso-btn" onclick="doLogin()">
+        <div class="sso-ms-icon">M</div>
+        Sign in with Microsoft (Azure AD SSO)
+      </button>
+      <div class="login-note">🔒 Authenticated via Azure Active Directory · Single Sign-On<br>No passwords stored locally. Session governed by Cognizant IT policy.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MANAGER HOME
+════════════════════════════════════════ -->
+<div id="screen-manager" class="screen">
+  <nav class="topnav">
+    <a class="nav-logo"><div class="nav-logo-mark">C</div><span class="nav-logo-text">Cognizant · <span>EWS</span></span></a>
+    <div class="nav-sep"></div>
+    <div class="nav-links">
+      <button class="nav-btn active" id="mgr-nav-home" onclick="showMgrTab('home')">Dashboard</button>
+      <button class="nav-btn" id="mgr-nav-span" onclick="showMgrTab('span')">My Span (12)</button>
+    </div>
+    <div class="nav-spacer"></div>
+    <span class="nav-month">APR 2026</span>
+    <div class="nav-user" id="mgr-user-chip" onclick="doLogout()">
+      <div class="nav-avatar" style="background:var(--cyan);color:var(--navy);">RS</div>
+      <div><span class="nav-username">Rajesh Sharma</span><span class="nav-role-tag">Team Lead · App Services</span></div>
+    </div>
+  </nav>
+  <div class="main">
+    <!-- TAB: HOME -->
+    <div id="mgr-home">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-title">Monthly Dashboard</div>
+          <div class="page-sub">April 2026 · Application Services · Rajesh Sharma (TL)</div>
+        </div>
+        <div class="page-actions">
+          <div class="month-selector">
+            <button class="month-nav-btn">‹</button>
+            <div class="month-display">Apr 2026</div>
+            <button class="month-nav-btn">›</button>
+          </div>
+          <button class="btn btn-ghost btn-sm">📤 Export</button>
+          <button class="btn btn-primary btn-sm" onclick="showMgrTab('span')">View My Span →</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card" onclick="showMgrTab('span')">
+          <div class="kpi-accent kpi-acc-navy"></div>
+          <div class="kpi-label">Total Span</div>
+          <div class="kpi-value">12</div>
+          <div class="kpi-sub">Active reportees</div>
+          <div class="kpi-trend trend-neutral">→ 0</div>
+        </div>
+        <div class="kpi-card" onclick="filterSpan('high')">
+          <div class="kpi-accent kpi-acc-red"></div>
+          <div class="kpi-label">High Risk</div>
+          <div class="kpi-value" style="color:var(--red);">2</div>
+          <div class="kpi-sub">Score 1 · Likely in 1M</div>
+          <div class="kpi-trend trend-down">↑ +1</div>
+        </div>
+        <div class="kpi-card" onclick="filterSpan('medium')">
+          <div class="kpi-accent kpi-acc-amber"></div>
+          <div class="kpi-label">Medium Risk</div>
+          <div class="kpi-value" style="color:var(--amber);">4</div>
+          <div class="kpi-sub">Score 3 · Within 3M</div>
+          <div class="kpi-trend trend-down">↑ +2</div>
+        </div>
+        <div class="kpi-card" onclick="filterSpan('low')">
+          <div class="kpi-accent kpi-acc-green"></div>
+          <div class="kpi-label">Low Risk</div>
+          <div class="kpi-value" style="color:var(--green);">4</div>
+          <div class="kpi-sub">Score 5 · Stable</div>
+          <div class="kpi-trend trend-up">↓ -1</div>
+        </div>
+        <div class="kpi-card" onclick="showMgrTab('span')">
+          <div class="kpi-accent kpi-acc-cyan"></div>
+          <div class="kpi-label">Completion</div>
+          <div class="kpi-value">66<span style="font-size:16px;font-weight:600;">%</span></div>
+          <div class="kpi-sub">8 of 12 submitted</div>
+          <div class="kpi-trend trend-neutral">4 pending</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Pending Submissions -->
+        <div class="card">
+          <div class="card-header">
+            <span style="font-size:16px;">⚠️</span>
+            <span class="card-title">Pending Submissions (4)</span>
+            <div class="card-header-actions">
+              <span class="badge b-amber b-dot">Action Required</span>
+            </div>
+          </div>
+          <div class="overdue-strip" style="margin:12px 20px 0;border-radius:8px;">
+            <div class="overdue-title">⏰ Escalation Alert — 5 days overdue</div>
+            <div class="overdue-body">Ankit Kumar (EMP003) — Auto-escalation to SDM Priya Mehta on Apr 10 if not submitted.</div>
+          </div>
+          <div class="card-body">
+            <div class="pending-item" onclick="openAssessment('EMP003')">
+              <div class="p-avatar" style="background:#fff8ed;color:var(--amber);">AK</div>
+              <div style="flex:1;"><div class="p-name">Ankit Kumar</div><div class="p-meta">SE · Digital Commerce · Draft saved</div></div>
+              <span class="badge b-gray">Draft</span>
+            </div>
+            <div class="pending-item" onclick="openAssessment('EMP007')">
+              <div class="p-avatar" style="background:var(--gray-100);color:var(--gray-600);">PS</div>
+              <div style="flex:1;"><div class="p-name">Priya Singh</div><div class="p-meta">SSE · Application Services · 1:1 pending</div></div>
+              <span class="badge b-gray b-dot">Pending</span>
+            </div>
+            <div class="pending-item" onclick="openAssessment('EMP009')">
+              <div class="p-avatar" style="background:var(--gray-100);color:var(--gray-600);">MD</div>
+              <div style="flex:1;"><div class="p-name">Mohan Das</div><div class="p-meta">SE · Testing Services · 1:1 pending</div></div>
+              <span class="badge b-gray b-dot">Pending</span>
+            </div>
+            <div class="pending-item" onclick="openAssessment('EMP011')">
+              <div class="p-avatar" style="background:var(--gray-100);color:var(--gray-600);">SG</div>
+              <div style="flex:1;"><div class="p-name">Sneha Gupta</div><div class="p-meta">JSE · Cloud Practice · 1:1 done</div></div>
+              <span class="badge b-gray b-dot">Pending</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HR Flagged -->
+        <div class="card">
+          <div class="card-header">
+            <span style="font-size:16px;">🚨</span>
+            <span class="card-title">HR Interventions (2)</span>
+            <div class="card-header-actions">
+              <button class="btn btn-ghost btn-xs" onclick="switchToHR()">View HR →</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="pending-item" onclick="openAssessment('EMP001')">
+              <div class="p-avatar" style="background:var(--red-bg);color:var(--red);">VP</div>
+              <div style="flex:1;"><div class="p-name">Vikas Pandey</div><div class="p-meta">SSE · Compensation · Score 1 · In Progress</div></div>
+              <span class="badge b-red b-dot">High</span>
+            </div>
+            <div class="pending-item" onclick="openAssessment('EMP002')">
+              <div class="p-avatar" style="background:var(--amber-bg);color:var(--amber);">RT</div>
+              <div style="flex:1;"><div class="p-name">Ruchi Tiwari</div><div class="p-meta">SE · Career Growth · Score 3 · Open</div></div>
+              <span class="badge b-amber b-dot">Medium</span>
+            </div>
+          </div>
+          <div class="card-header" style="border-top:1px solid var(--gray-100);border-bottom:none;padding:12px 20px;">
+            <span style="font-size:14px;">📊</span>
+            <span class="card-title">Risk Distribution — Apr 2026</span>
+          </div>
+          <div style="padding:14px 20px;">
+            <div class="stack-row"><div class="stack-label">High Risk</div><div class="stack-track"><div class="stack-fill" style="width:16%;background:var(--red);"></div></div><div class="stack-num">2</div></div>
+            <div class="stack-row"><div class="stack-label">Medium</div><div class="stack-track"><div class="stack-fill" style="width:33%;background:var(--amber);"></div></div><div class="stack-num">4</div></div>
+            <div class="stack-row"><div class="stack-label">Low Risk</div><div class="stack-track"><div class="stack-fill" style="width:33%;background:var(--green);"></div></div><div class="stack-num">4</div></div>
+            <div class="stack-row"><div class="stack-label">Pending</div><div class="stack-track"><div class="stack-fill" style="width:33%;background:var(--gray-300);"></div></div><div class="stack-num">4</div></div>
+            <div class="divider"></div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="flex:1;"><div class="progress-bar" style="height:10px;"><div class="progress-fill" style="width:66%;"></div></div></div>
+              <div style="font-size:18px;font-weight:800;color:var(--navy);">66%</div>
+              <div style="font-size:11px;color:var(--gray-400);">8/12 submitted</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: MY SPAN -->
+    <div id="mgr-span" style="display:none;">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-title">My Span — Apr 2026</div>
+          <div class="page-sub">12 associates · Application Services · Rajesh Sharma (TL)</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-ghost btn-sm">📥 Download</button>
+          <button class="btn btn-primary btn-sm" onclick="showToast('✅ Reminder emails sent to 4 pending associates','success')">📩 Send Reminders</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="filters-bar">
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search by name, EMP ID, designation..." oninput="filterSpanTable(this.value)">
+          </div>
+          <select class="form-select" style="width:auto;" onchange="filterSpanByStatus(this.value)">
+            <option value="">All Status</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Draft">Draft</option>
+            <option value="Pending">Pending</option>
+          </select>
+          <select class="form-select" style="width:auto;" onchange="filterSpanByRisk(this.value)">
+            <option value="">All Risk</option>
+            <option value="High">High (1)</option>
+            <option value="Medium">Medium (3)</option>
+            <option value="Low">Low (5)</option>
+          </select>
+          <select class="form-select" style="width:auto;">
+            <option>All Sub-Process</option>
+            <option>Application Services</option>
+            <option>Digital Commerce</option>
+            <option>Testing Services</option>
+            <option>Cloud Practice</option>
+          </select>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl" id="span-table">
+            <thead>
+              <tr>
+                <th>EMP ID</th><th>Name</th><th>Designation</th><th>Sub Process</th>
+                <th>Lead Name</th><th>Month Status</th><th>Final Risk</th>
+                <th>HR Flag</th><th>1:1</th><th>Last Updated</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="span-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     ASSESSMENT DETAIL
+════════════════════════════════════════ -->
+<div id="screen-assessment" class="screen">
+  <nav class="topnav">
+    <a class="nav-logo"><div class="nav-logo-mark">C</div><span class="nav-logo-text">Cognizant · <span>EWS</span></span></a>
+    <div class="nav-sep"></div>
+    <span style="font-size:13px;color:rgba(255,255,255,0.5);">Monthly Assessment</span>
+    <div class="nav-spacer"></div>
+    <span class="nav-month">APR 2026</span>
+    <div class="nav-user" id="assess-user-chip" onclick="doLogout()">
+      <div class="nav-avatar" style="background:var(--cyan);color:var(--navy);">RS</div>
+      <div><span class="nav-username">Rajesh Sharma</span><span class="nav-role-tag">Team Lead</span></div>
+    </div>
+  </nav>
+  <div class="main">
+    <button class="back-btn" onclick="goBackFromAssess()">← Back to My Span</button>
+    <div id="lock-banner" class="alert-banner alert-amber" style="display:none;">
+      <span class="alert-icon">🔒</span>
+      <div><div class="alert-title">Assessment Locked</div><div class="alert-body">This record was submitted on <span id="lock-date">Apr 05, 2026</span>. It is now locked for Apr 2026. View-only mode.</div></div>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="step-indicator" id="step-indicator">
+      <div class="step-item"><div class="step-dot done" id="step1-dot">✓</div><span class="step-label" id="step1-lbl">1:1 Meeting</span></div>
+      <div class="step-line done" id="step12-line"></div>
+      <div class="step-item"><div class="step-dot active" id="step2-dot">2</div><span class="step-label active" id="step2-lbl">Risk Factors</span></div>
+      <div class="step-line" id="step23-line"></div>
+      <div class="step-item"><div class="step-dot todo" id="step3-dot">3</div><span class="step-label" id="step3-lbl">Stack Ranking</span></div>
+      <div class="step-line" id="step34-line"></div>
+      <div class="step-item"><div class="step-dot todo" id="step4-dot">4</div><span class="step-label" id="step4-lbl">HR Intervention</span></div>
+    </div>
+
+    <div class="assess-layout">
+      <!-- MAIN FORM -->
+      <div class="assess-main">
+
+        <!-- STEP 1: 1:1 -->
+        <div class="card" id="step1-card">
+          <div class="card-header">
+            <span style="background:var(--navy);color:white;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</span>
+            <span class="card-title">1:1 Meeting Completion</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--gray-400);">Required before scoring can be enabled</span>
+          </div>
+          <div style="padding:16px 20px;">
+            <div class="toggle-wrap" style="margin-bottom:14px;">
+              <button class="toggle-switch on" id="oo-toggle" onclick="toggleOO()"></button>
+              <div><div class="toggle-label" id="oo-label">1:1 Completed ✓</div><div class="toggle-sub">Mark that the 1:1 meeting has taken place before scoring</div></div>
+            </div>
+            <div id="oo-date-row" class="form-row" style="max-width:420px;">
+              <div class="form-group">
+                <label class="form-label">1:1 Date</label>
+                <input type="date" class="form-input" id="oo-date" value="2026-04-03">
+              </div>
+              <div class="form-group" style="justify-content:flex-end;padding-bottom:2px;">
+                <div></div>
+                <span class="badge b-green">✓ Scoring unlocked</span>
+              </div>
+            </div>
+            <div id="oo-warn" class="alert-banner alert-red" style="display:none;">
+              <span class="alert-icon">⛔</span>
+              <div><div class="alert-title">Scoring Locked</div><div class="alert-body">Please complete the 1:1 meeting and mark it as done above before you can score risk factors.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: RISK FACTORS -->
+        <div class="card" id="step2-card" style="margin-bottom:14px;">
+          <div class="card-header">
+            <span style="background:var(--navy);color:white;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</span>
+            <span class="card-title">Risk Factor Scoring</span>
+            <div class="card-header-actions">
+              <span class="badge b-red">1 = High (quit in 1M)</span>
+              <span class="badge b-amber">3 = Medium (3M)</span>
+              <span class="badge b-green">5 = Low (stable)</span>
+            </div>
+          </div>
+          <div style="padding:16px 20px;" id="scoring-body">
+            <!-- Factors rendered by JS -->
+          </div>
+        </div>
+
+        <!-- STEP 3: STACK RANKING -->
+        <div class="card" id="step3-card" style="margin-bottom:14px;">
+          <div class="card-header">
+            <span style="background:var(--navy);color:white;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</span>
+            <span class="card-title">Stack Ranking</span>
+          </div>
+          <div style="padding:16px 20px;">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Performance Score (1–5)</label>
+                <input type="range" min="1" max="5" value="3" id="perf-range" class="form-input" style="padding:4px;" oninput="updateStack('perf',this.value)">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gray-400);margin-top:3px;"><span>1 — Poor</span><span id="perf-disp" style="font-weight:800;color:var(--navy);">3 / 5</span><span>5 — Excellent</span></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Behavior Score (1–5)</label>
+                <input type="range" min="1" max="5" value="4" id="beh-range" class="form-input" style="padding:4px;" oninput="updateStack('beh',this.value)">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gray-400);margin-top:3px;"><span>1 — Poor</span><span id="beh-disp" style="font-weight:800;color:var(--navy);">4 / 5</span><span>5 — Excellent</span></div>
+              </div>
+              <div class="form-group" style="max-width:180px;">
+                <label class="form-label">Stack Bucket</label>
+                <select class="form-select" id="bucket-select">
+                  <option>Top Performer</option>
+                  <option selected>Core Performer</option>
+                  <option>Emerging Talent</option>
+                  <option>At Risk</option>
+                  <option>Improvement Needed</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: HR INTERVENTION -->
+        <div class="card" id="step4-card" style="margin-bottom:14px;">
+          <div class="card-header">
+            <span style="background:var(--navy);color:white;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">4</span>
+            <span class="card-title">HR Intervention Request</span>
+          </div>
+          <div style="padding:16px 20px;">
+            <div class="toggle-wrap" style="margin-bottom:12px;">
+              <button class="toggle-switch" id="hr-toggle" onclick="toggleHR()"></button>
+              <div><div class="toggle-label">Request HR Intervention</div><div class="toggle-sub">HR SPOC will be notified automatically on submission</div></div>
+            </div>
+            <div id="hr-notes-section" style="display:none;">
+              <div class="form-group">
+                <label class="form-label">HR Intervention Notes <span class="req">*</span></label>
+                <textarea class="form-textarea" id="hr-notes-input" placeholder="Describe the situation and what HR intervention is needed. Be specific about the issue and urgency..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <div style="display:flex;gap:10px;align-items:center;padding:4px 0 20px;">
+          <button class="btn btn-primary" id="submit-btn" onclick="submitAssessment()">✓ Submit Assessment</button>
+          <button class="btn btn-ghost" id="draft-btn" onclick="showToast('💾 Assessment saved as Draft','info')">Save Draft</button>
+          <span id="submit-note" style="font-size:12px;color:var(--gray-400);">Once submitted, this record will be locked for Apr 2026.</span>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="assess-sidebar">
+        <div class="emp-card" id="emp-card">
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;">Employee Record</div>
+          <div class="emp-card-name" id="emp-disp-name">—</div>
+          <div class="emp-card-meta" id="emp-disp-meta">—</div>
+          <div class="emp-card-badge">APR 2026 · ASSESSMENT</div>
+        </div>
+
+        <div class="score-box" id="score-sidebar">
+          <div class="score-box-label">Auto-calculated Risk Score</div>
+          <div class="score-box-value" id="score-disp-val" style="color:var(--amber);">3</div>
+          <div class="score-box-status"><span class="badge b-amber b-dot" id="score-disp-badge">Medium Risk</span></div>
+          <div class="score-box-logic">
+            Any factor = 1 → Score 1 (High)<br>
+            Any factor = 3 → Score 3 (Medium)<br>
+            All factors = 5 → Score 5 (Low)
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:12px;">
+          <div class="card-header"><span class="card-title">Stack Performance</span></div>
+          <div style="padding:12px 16px;">
+            <div class="stack-row"><div class="stack-label">Performance</div><div class="stack-track"><div class="stack-fill prog-perf" id="perf-bar" style="width:60%;"></div></div><div class="stack-num" id="perf-num">3</div></div>
+            <div class="stack-row"><div class="stack-label">Behavior</div><div class="stack-track"><div class="stack-fill prog-beh" id="beh-bar" style="width:80%;"></div></div><div class="stack-num" id="beh-num">4</div></div>
+            <div style="margin-top:8px;"><span class="chip" id="bucket-chip">Core Performer</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Previous Months</span></div>
+          <div style="padding:8px 16px;" id="hist-panel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     HR DASHBOARD
+════════════════════════════════════════ -->
+<div id="screen-hr" class="screen">
+  <nav class="topnav">
+    <a class="nav-logo"><div class="nav-logo-mark">C</div><span class="nav-logo-text">Cognizant · <span>EWS</span></span></a>
+    <div class="nav-sep"></div>
+    <div class="nav-links">
+      <button class="nav-btn active" id="hr-nav-dash">HR Dashboard</button>
+      <button class="nav-btn" onclick="openHRAction(null)" id="hr-nav-action">Action Tracker</button>
+    </div>
+    <div class="nav-spacer"></div>
+    <span class="nav-month">APR 2026</span>
+    <div class="nav-user" onclick="doLogout()">
+      <div class="nav-avatar" style="background:#a78bfa;color:white;">AP</div>
+      <div><span class="nav-username">Anjali Patel</span><span class="nav-role-tag">HR SPOC · App Services</span></div>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="page-header">
+      <div class="page-title-wrap">
+        <div class="page-title">HR Intervention Dashboard</div>
+        <div class="page-sub">High-risk & HR-flagged employees · Apr 2026 · Application Services Tower</div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-ghost btn-sm">📥 Export</button>
+        <button class="btn btn-primary btn-sm" onclick="showToast('📩 Summary report sent to HR leadership','success')">📊 Send Report</button>
+      </div>
+    </div>
+
+    <div class="hr-stat-grid">
+      <div class="hr-stat-card"><div class="hr-stat-val" style="color:var(--red);">6</div><div class="hr-stat-label">High Risk (Score 1)</div></div>
+      <div class="hr-stat-card"><div class="hr-stat-val" style="color:var(--amber);">9</div><div class="hr-stat-label">HR Flagged this Month</div></div>
+      <div class="hr-stat-card"><div class="hr-stat-val" style="color:var(--green);">5</div><div class="hr-stat-label">Actions Closed</div></div>
+      <div class="hr-stat-card"><div class="hr-stat-val" style="color:var(--navy);">4</div><div class="hr-stat-label">Open Actions</div></div>
+    </div>
+
+    <div class="card">
+      <div class="filters-bar">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Search by employee name, manager, tower...">
+        </div>
+        <select class="form-select" style="width:auto;">
+          <option selected>Apr 2026</option><option>Mar 2026</option><option>Feb 2026</option>
+        </select>
+        <select class="form-select" style="width:auto;">
+          <option>All Towers</option><option>Application Services</option><option>Digital Commerce</option><option>Cloud Practice</option>
+        </select>
+        <select class="form-select" style="width:auto;">
+          <option>All Risk</option><option>High (1)</option><option>Medium (3)</option>
+        </select>
+        <select class="form-select" style="width:auto;">
+          <option>All Actions</option><option>Open</option><option>In Progress</option><option>Closed</option>
+        </select>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr><th>EMP ID</th><th>Name</th><th>Designation</th><th>Tower · Sub Process</th><th>Manager</th><th>Risk Score</th><th>HR Flag</th><th>Action Status</th><th>Target Date</th><th></th></tr>
+          </thead>
+          <tbody id="hr-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     HR ACTION SCREEN
+════════════════════════════════════════ -->
+<div id="screen-hr-action" class="screen">
+  <nav class="topnav">
+    <a class="nav-logo"><div class="nav-logo-mark">C</div><span class="nav-logo-text">Cognizant · <span>EWS</span></span></a>
+    <div class="nav-sep"></div>
+    <span style="font-size:13px;color:rgba(255,255,255,0.5);">HR Action</span>
+    <div class="nav-spacer"></div>
+    <span class="nav-month">APR 2026</span>
+    <div class="nav-user" onclick="doLogout()">
+      <div class="nav-avatar" style="background:#a78bfa;color:white;">AP</div>
+      <div><span class="nav-username">Anjali Patel</span><span class="nav-role-tag">HR SPOC</span></div>
+    </div>
+  </nav>
+  <div class="main">
+    <button class="back-btn" onclick="goBackFromHRAction()">← Back to HR Dashboard</button>
+    <div id="hr-action-header"></div>
+    <div class="grid-2">
+      <!-- LEFT: Submission Details -->
+      <div>
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-header"><span class="card-title">Manager Submission — Read Only</span></div>
+          <div style="padding:16px 20px;" id="hr-action-submission"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">📋 Action History</span></div>
+          <div style="padding:16px 20px;" id="hr-action-timeline"></div>
+        </div>
+      </div>
+      <!-- RIGHT: Action Form -->
+      <div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Create / Update HR Action</span></div>
+          <div style="padding:16px 20px;">
+            <div class="form-row" style="margin-bottom:14px;">
+              <div class="form-group">
+                <label class="form-label">Assigned HR SPOC</label>
+                <select class="form-select">
+                  <option>Anjali Patel</option><option>Meera Doshi</option><option>Suresh Nair</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Action Type</label>
+                <select class="form-select">
+                  <option>Retention Discussion</option>
+                  <option>Counseling</option>
+                  <option>Compensation Review</option>
+                  <option>Career Pathing</option>
+                  <option>Disciplinary Action</option>
+                  <option>Exit Initiated</option>
+                  <option>Skip-Level Meeting</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="form-label">Action Notes <span class="req">*</span></label>
+              <textarea class="form-textarea" placeholder="Document what was discussed, next steps, and any commitments made..." style="min-height:100px;"></textarea>
+            </div>
+            <div class="form-row" style="margin-bottom:14px;">
+              <div class="form-group">
+                <label class="form-label">Target Closure Date</label>
+                <input type="date" class="form-input" value="2026-04-20">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="action-status-select">
+                  <option>Open</option><option selected>In Progress</option><option>Closed</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-primary" onclick="showToast('💾 HR Action saved successfully','success')">💾 Save Action</button>
+              <button class="btn btn-green btn-sm" onclick="showToast('✅ Action marked as Closed','success')">✓ Mark Closed</button>
+              <button class="btn btn-ghost btn-sm" onclick="showToast('📩 Notification sent to manager','info')">Notify Manager</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     ADMIN SCREEN
+════════════════════════════════════════ -->
+<div id="screen-admin" class="screen">
+  <nav class="topnav">
+    <a class="nav-logo"><div class="nav-logo-mark">C</div><span class="nav-logo-text">Cognizant · <span>EWS</span></span></a>
+    <div class="nav-sep"></div>
+    <div class="nav-links">
+      <button class="nav-btn active">Admin Console</button>
+    </div>
+    <div class="nav-spacer"></div>
+    <span class="nav-month">APR 2026</span>
+    <div class="nav-user" onclick="doLogout()">
+      <div class="nav-avatar" style="background:#f59e0b;color:white;">VA</div>
+      <div><span class="nav-username">Vinod Adiga</span><span class="nav-role-tag">Platform Admin</span></div>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="page-header">
+      <div class="page-title-wrap"><div class="page-title">Admin Configuration</div><div class="page-sub">Manage org span, risk factors, and HR SPOC mappings</div></div>
+    </div>
+    <div class="admin-tab-row">
+      <div class="admin-tab active" id="atab-span" onclick="selectAdminTab('span')">
+        <div class="admin-tab-icon">👥</div>
+        <div><div class="admin-tab-title">Org Span Management</div><div class="admin-tab-sub">Upload & manage manager-associate mapping. Bulk import via Excel/CSV.</div></div>
+      </div>
+      <div class="admin-tab" id="atab-factors" onclick="selectAdminTab('factors')">
+        <div class="admin-tab-icon">⚠️</div>
+        <div><div class="admin-tab-title">Risk Factor Configuration</div><div class="admin-tab-sub">Add, edit, or disable EWS scoring factors and groups.</div></div>
+      </div>
+      <div class="admin-tab" id="atab-mapping" onclick="selectAdminTab('mapping')">
+        <div class="admin-tab-icon">🗺️</div>
+        <div><div class="admin-tab-title">HR SPOC Mapping</div><div class="admin-tab-sub">Assign HR SPOCs to towers and sub-processes.</div></div>
+      </div>
+    </div>
+
+    <!-- SPAN PANEL -->
+    <div id="admin-panel-span">
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card-header"><span class="card-title">Bulk Upload — Org Span</span><div class="card-header-actions"><span class="badge b-cyan">Excel / CSV</span></div></div>
+        <div style="padding:16px 20px;">
+          <div class="upload-zone" onclick="showToast('📁 File browser opened — select your Org Span Excel file','info')">
+            <div class="upload-zone-icon">📁</div>
+            <div class="upload-zone-title">Drag & drop your Org Span file here</div>
+            <div class="upload-zone-sub">Supports .xlsx, .csv<br>Required columns: Manager_Email · Manager_Level · EMP_ID · Effective_From · Effective_To</div>
+            <button class="btn btn-primary btn-sm" style="margin-top:14px;" onclick="event.stopPropagation();showToast('📁 File selected — validating schema...','info')">Browse File</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Current Span Records (28 rows)</span><div class="card-header-actions"><button class="btn btn-cyan btn-sm" onclick="showToast('➕ New span row form opened','info')">+ Add Row</button></div></div>
+        <div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>Manager Email</th><th>Manager Level</th><th>EMP ID</th><th>Effective From</th><th>Effective To</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>rajesh.sharma@cognizant.com</td><td><span class="badge b-navy">TL</span></td><td><code>EMP001</code></td><td>2024-01-01</td><td>—</td><td><button class="btn btn-ghost btn-xs" onclick="showToast('✏️ Edit span row mode','info')">Edit</button> <button class="btn btn-red btn-xs" onclick="showToast('🗑️ Row deleted','info')">Delete</button></td></tr>
+            <tr><td>rajesh.sharma@cognizant.com</td><td><span class="badge b-navy">TL</span></td><td><code>EMP002</code></td><td>2024-01-01</td><td>—</td><td><button class="btn btn-ghost btn-xs">Edit</button> <button class="btn btn-red btn-xs">Delete</button></td></tr>
+            <tr><td>rajesh.sharma@cognizant.com</td><td><span class="badge b-navy">TL</span></td><td><code>EMP003</code></td><td>2024-01-01</td><td>—</td><td><button class="btn btn-ghost btn-xs">Edit</button> <button class="btn btn-red btn-xs">Delete</button></td></tr>
+            <tr><td>deepak.kumar@cognizant.com</td><td><span class="badge b-blue">TM</span></td><td><code>EMP010</code></td><td>2024-03-01</td><td>—</td><td><button class="btn btn-ghost btn-xs">Edit</button> <button class="btn btn-red btn-xs">Delete</button></td></tr>
+            <tr><td>priya.mehta@cognizant.com</td><td><span class="badge b-purple">SDM</span></td><td><code>EMP018</code></td><td>2023-07-01</td><td>—</td><td><button class="btn btn-ghost btn-xs">Edit</button> <button class="btn btn-red btn-xs">Delete</button></td></tr>
+            <tr><td>amit.roy@cognizant.com</td><td><span class="badge b-navy">TL</span></td><td><code>EMP014</code></td><td>2024-06-01</td><td>—</td><td><button class="btn btn-ghost btn-xs">Edit</button> <button class="btn btn-red btn-xs">Delete</button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- FACTORS PANEL -->
+    <div id="admin-panel-factors" style="display:none;">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Risk Factor Configuration (18 factors)</span><div class="card-header-actions"><button class="btn btn-cyan btn-sm" onclick="showToast('➕ New factor form opened','info')">+ Add Factor</button></div></div>
+        <div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>Factor Group</th><th>Factor Name</th><th>Mandatory Comment (Score=1)</th><th>Active</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><span class="chip">Career & Growth</span></td><td>Promotion expectation unmet</td><td><span class="badge b-green">Yes</span></td><td>✅ Active</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td><span class="chip">Career & Growth</span></td><td>Skill growth / learning opportunity</td><td><span class="badge b-gray">No</span></td><td>✅ Active</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td><span class="chip">Compensation</span></td><td>Salary dissatisfaction</td><td><span class="badge b-green">Yes</span></td><td>✅ Active</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td><span class="chip">Compensation</span></td><td>External offer / counter-offer risk</td><td><span class="badge b-green">Yes</span></td><td>✅ Active</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td><span class="chip">Org Disconnect</span></td><td>Team / manager relationship issues</td><td><span class="badge b-gray">No</span></td><td>✅ Active</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td><span class="chip">Org Disconnect</span></td><td>Project / role fitment</td><td><span class="badge b-gray">No</span></td><td>✅ Active</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td><span class="chip">Disciplinary</span></td><td>Attendance / behavioral concerns</td><td><span class="badge b-green">Yes</span></td><td>✅ Active</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td><span class="chip">Personal</span></td><td>Personal stress / life events</td><td><span class="badge b-gray">No</span></td><td>✅ Active</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td><span class="chip">Personal</span></td><td>Health concerns impacting work</td><td><span class="badge b-gray">No</span></td><td><span style="color:var(--gray-400);">⚪ Inactive</span></td><td><button class="btn btn-ghost btn-xs">Enable</button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- MAPPING PANEL -->
+    <div id="admin-panel-mapping" style="display:none;">
+      <div class="card">
+        <div class="card-header"><span class="card-title">HR SPOC Mapping</span><div class="card-header-actions"><button class="btn btn-cyan btn-sm" onclick="showToast('➕ New SPOC mapping form','info')">+ Add Mapping</button></div></div>
+        <div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>Tower</th><th>Sub Process</th><th>HR SPOC Email</th><th>SPOC Name</th><th>Effective From</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Application Services</td><td>All</td><td>anjali.patel@cognizant.com</td><td>Anjali Patel</td><td>2024-01-01</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td>Digital Commerce</td><td>All</td><td>meera.doshi@cognizant.com</td><td>Meera Doshi</td><td>2024-01-01</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td>Cloud Practice</td><td>Cloud Ops</td><td>anjali.patel@cognizant.com</td><td>Anjali Patel</td><td>2024-06-01</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            <tr><td>Testing Services</td><td>All</td><td>suresh.nair@cognizant.com</td><td>Suresh Nair</td><td>2023-11-01</td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     LEADERSHIP VIEW
+════════════════════════════════════════ -->
+<div id="screen-leadership" class="screen">
+  <nav class="topnav">
+    <a class="nav-logo"><div class="nav-logo-mark">C</div><span class="nav-logo-text">Cognizant · <span>EWS</span></span></a>
+    <div class="nav-sep"></div>
+    <span style="font-size:13px;color:rgba(255,255,255,0.5);">Leadership View — Read Only</span>
+    <div class="nav-spacer"></div>
+    <span class="nav-month">APR 2026</span>
+    <div class="nav-user" onclick="doLogout()">
+      <div class="nav-avatar" style="background:#f59e0b;color:white;">SK</div>
+      <div><span class="nav-username">Sanjay Kumar</span><span class="nav-role-tag">DGM · Application Services</span></div>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="page-header">
+      <div class="page-title-wrap"><div class="page-title">Leadership Analytics</div><div class="page-sub">Read-only view · All towers · Apr 2026</div></div>
+      <div class="page-actions">
+        <select class="form-select" style="width:auto;"><option>Apr 2026</option><option>Mar 2026</option><option>Feb 2026</option></select>
+        <button class="btn btn-ghost btn-sm">📥 Download Report</button>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-accent kpi-acc-navy"></div><div class="kpi-label">Total Headcount</div><div class="kpi-value">186</div><div class="kpi-sub">Across all towers</div></div>
+      <div class="kpi-card"><div class="kpi-accent kpi-acc-red"></div><div class="kpi-label">High Risk (1)</div><div class="kpi-value" style="color:var(--red);">18</div><div class="kpi-sub">9.7% of span</div><div class="kpi-trend trend-down">↑ +4</div></div>
+      <div class="kpi-card"><div class="kpi-accent kpi-acc-amber"></div><div class="kpi-label">Medium Risk (3)</div><div class="kpi-value" style="color:var(--amber);">34</div><div class="kpi-sub">18.3% of span</div><div class="kpi-trend trend-down">↑ +6</div></div>
+      <div class="kpi-card"><div class="kpi-accent kpi-acc-green"></div><div class="kpi-label">Low Risk (5)</div><div class="kpi-value" style="color:var(--green);">89</div><div class="kpi-sub">47.8% of span</div><div class="kpi-trend trend-up">↑ +3</div></div>
+      <div class="kpi-card"><div class="kpi-accent kpi-acc-cyan"></div><div class="kpi-label">Overall Completion</div><div class="kpi-value">79<span style="font-size:16px;font-weight:600;">%</span></div><div class="kpi-sub">147 / 186 submitted</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Risk by Tower</span></div>
+        <div style="padding:16px 20px;">
+          <div style="margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px;"><span>Application Services</span><span style="color:var(--red);">8 High</span></div>
+            <div class="progress-bar" style="height:10px;"><div class="progress-fill" style="width:76%;background:var(--red);"></div></div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px;"><span>Digital Commerce</span><span style="color:var(--amber);">5 High</span></div>
+            <div class="progress-bar" style="height:10px;"><div class="progress-fill" style="width:52%;background:var(--amber);"></div></div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px;"><span>Cloud Practice</span><span style="color:var(--amber);">3 High</span></div>
+            <div class="progress-bar" style="height:10px;"><div class="progress-fill" style="width:38%;background:var(--amber);"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px;"><span>Testing Services</span><span style="color:var(--green);">2 High</span></div>
+            <div class="progress-bar" style="height:10px;"><div class="progress-fill" style="width:22%;background:var(--green);"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Submission Compliance by Manager Level</span></div>
+        <div style="padding:16px 20px;">
+          <div class="stack-row"><div class="stack-label" style="width:60px;">TL</div><div class="stack-track"><div class="stack-fill" style="width:82%;background:var(--green);"></div></div><div class="stack-num" style="font-size:12px;">82%</div></div>
+          <div class="stack-row"><div class="stack-label" style="width:60px;">TM</div><div class="stack-track"><div class="stack-fill" style="width:91%;background:var(--green);"></div></div><div class="stack-num" style="font-size:12px;">91%</div></div>
+          <div class="stack-row"><div class="stack-label" style="width:60px;">SDM</div><div class="stack-track"><div class="stack-fill" style="width:75%;background:var(--amber);"></div></div><div class="stack-num" style="font-size:12px;">75%</div></div>
+          <div class="stack-row"><div class="stack-label" style="width:60px;">DGM</div><div class="stack-track"><div class="stack-fill" style="width:100%;background:var(--green);"></div></div><div class="stack-num" style="font-size:12px;">100%</div></div>
+          <div class="divider"></div>
+          <div class="alert-banner alert-amber" style="margin:0;padding:10px 12px;">
+            <span class="alert-icon">⚠️</span>
+            <div><div class="alert-title">3 managers overdue by 5+ days</div><div class="alert-body">Escalation emails sent to SDM-level on Apr 08.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// SAMPLE DATA
+// ═══════════════════════════════════════
+const EMPLOYEES = {
+  EMP001: { name:'Vikas Pandey', desig:'SSE', sub:'Application Services', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Submitted', risk:'High', riskScore:1, hrFlag:true, oo:true, ooDate:'Apr 02, 2026', lastUpdated:'Apr 05, 2026', locked:true, lockDate:'Apr 05, 2026', perf:2, beh:3, bucket:'At Risk', hrIntv:true, hrNotes:'External offer received. Compensation gap significant.', mgr:'Rajesh Sharma', factors:{f1:1,f2:3,f3:1,f4:3,f5:5,f6:5,f7:5,f8:5}, comments:{f1:'Promotion delayed by 2 cycles',f3:'Received competing offer 20% higher'}, history:[{month:'Mar 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP002: { name:'Ruchi Tiwari', desig:'SE', sub:'Digital Commerce', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Submitted', risk:'Medium', riskScore:3, hrFlag:true, oo:true, ooDate:'Apr 01, 2026', lastUpdated:'Apr 04, 2026', locked:true, lockDate:'Apr 04, 2026', perf:3, beh:4, bucket:'Core Performer', hrIntv:true, hrNotes:'Feels growth is stagnant. Looking for role change.', mgr:'Rajesh Sharma', factors:{f1:3,f2:3,f3:5,f4:5,f5:3,f6:3,f7:5,f8:5}, comments:{}, history:[{month:'Mar 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Feb 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP003: { name:'Ankit Kumar', desig:'SE', sub:'Digital Commerce', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Draft', risk:'—', riskScore:null, hrFlag:false, oo:true, ooDate:'Apr 03, 2026', lastUpdated:'Apr 04, 2026', locked:false, perf:3, beh:4, bucket:'Core Performer', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:3,f2:5,f3:3,f4:5,f5:5,f6:5,f7:5,f8:5}, comments:{}, history:[{month:'Mar 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:3,badge:'b-amber',label:'Medium (3)'}] },
+  EMP004: { name:'Neha Mishra', desig:'SSE', sub:'Testing Services', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Submitted', risk:'Low', riskScore:5, hrFlag:false, oo:true, ooDate:'Apr 02, 2026', lastUpdated:'Apr 06, 2026', locked:true, lockDate:'Apr 06, 2026', perf:4, beh:5, bucket:'Top Performer', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:5,f2:5,f3:5,f4:5,f5:5,f6:5,f7:5,f8:5}, comments:{}, history:[{month:'Mar 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP005: { name:'Kiran Rao', desig:'TA', sub:'Cloud Practice', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Submitted', risk:'Low', riskScore:5, hrFlag:false, oo:true, ooDate:'Apr 01, 2026', lastUpdated:'Apr 03, 2026', locked:true, lockDate:'Apr 03, 2026', perf:5, beh:5, bucket:'Top Performer', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:5,f2:5,f3:5,f4:5,f5:5,f6:5,f7:5,f8:5}, comments:{}, history:[{month:'Mar 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP006: { name:'Rahul Verma', desig:'SE', sub:'Application Services', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Submitted', risk:'Low', riskScore:5, hrFlag:false, oo:true, ooDate:'Mar 31, 2026', lastUpdated:'Apr 02, 2026', locked:true, lockDate:'Apr 02, 2026', perf:4, beh:4, bucket:'Core Performer', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:5,f2:5,f3:5,f4:5,f5:5,f6:5,f7:5,f8:5}, comments:{}, history:[{month:'Mar 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:3,badge:'b-amber',label:'Medium (3)'}] },
+  EMP007: { name:'Priya Singh', desig:'SSE', sub:'Application Services', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Pending', risk:'—', riskScore:null, hrFlag:false, oo:false, ooDate:'', lastUpdated:'—', locked:false, perf:3, beh:3, bucket:'Core Performer', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:3,f2:3,f3:3,f4:3,f5:3,f6:3,f7:5,f8:3}, comments:{}, history:[{month:'Mar 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP008: { name:'Suresh Babu', desig:'SE', sub:'Testing Services', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Submitted', risk:'Medium', riskScore:3, hrFlag:false, oo:true, ooDate:'Apr 03, 2026', lastUpdated:'Apr 05, 2026', locked:true, lockDate:'Apr 05, 2026', perf:3, beh:3, bucket:'Emerging Talent', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:3,f2:3,f3:5,f4:5,f5:5,f6:5,f7:5,f8:3}, comments:{}, history:[{month:'Mar 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP009: { name:'Mohan Das', desig:'SE', sub:'Testing Services', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Pending', risk:'—', riskScore:null, hrFlag:false, oo:false, ooDate:'', lastUpdated:'—', locked:false, perf:2, beh:3, bucket:'Improvement Needed', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:3,f2:3,f3:3,f4:3,f5:3,f6:3,f7:3,f8:3}, comments:{}, history:[{month:'Mar 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Feb 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP010: { name:'Sanjay Bhatt', desig:'TL', sub:'Cloud Practice', lead:'Deepak Kumar', acct:'Ravi Shah', tower:'Sanjay Joshi', status:'Submitted', risk:'High', riskScore:1, hrFlag:true, oo:true, ooDate:'Apr 01, 2026', lastUpdated:'Apr 04, 2026', locked:true, lockDate:'Apr 04, 2026', perf:2, beh:2, bucket:'At Risk', hrIntv:true, hrNotes:'Planning to relocate. Cannot be retained easily.', mgr:'Deepak Kumar', factors:{f1:1,f2:1,f3:3,f4:1,f5:5,f6:3,f7:3,f8:5}, comments:{f1:'Promotion denied 3 times consecutively',f2:'Relocation requested denied',f4:'Confirmed competing offer 30% higher'}, history:[{month:'Mar 2026',score:1,badge:'b-red',label:'High (1)'},{month:'Feb 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Jan 2026',score:3,badge:'b-amber',label:'Medium (3)'}] },
+  EMP011: { name:'Sneha Gupta', desig:'JSE', sub:'Cloud Practice', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Pending', risk:'—', riskScore:null, hrFlag:false, oo:true, ooDate:'Apr 04, 2026', lastUpdated:'Apr 04, 2026', locked:false, perf:4, beh:4, bucket:'Top Performer', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:5,f2:5,f3:5,f4:5,f5:5,f6:5,f7:5,f8:5}, comments:{}, history:[{month:'Mar 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP012: { name:'Amit Dubey', desig:'SE', sub:'Application Services', lead:'Rajesh Sharma', acct:'Priya Mehta', tower:'Sanjay Joshi', status:'Submitted', risk:'Medium', riskScore:3, hrFlag:false, oo:true, ooDate:'Apr 02, 2026', lastUpdated:'Apr 04, 2026', locked:true, lockDate:'Apr 04, 2026', perf:3, beh:4, bucket:'Core Performer', hrIntv:false, hrNotes:'', mgr:'Rajesh Sharma', factors:{f1:3,f2:5,f3:3,f4:5,f5:5,f6:5,f7:5,f8:3}, comments:{}, history:[{month:'Mar 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+  EMP014: { name:'Meena Krishnan', desig:'SE', sub:'Testing Services', lead:'Amit Roy', acct:'Ravi Shah', tower:'Sanjay Joshi', status:'Submitted', risk:'High', riskScore:1, hrFlag:true, oo:true, ooDate:'Mar 31, 2026', lastUpdated:'Apr 03, 2026', locked:true, lockDate:'Apr 03, 2026', perf:2, beh:3, bucket:'At Risk', hrIntv:true, hrNotes:'Work-life balance concerns. Night shifts causing burnout.', mgr:'Amit Roy', factors:{f1:1,f2:3,f3:5,f4:5,f5:5,f6:3,f7:3,f8:1}, comments:{f1:'Burnout from sustained overtime',f8:'Family health emergency ongoing'}, history:[{month:'Mar 2026',score:3,badge:'b-amber',label:'Medium (3)'},{month:'Feb 2026',score:5,badge:'b-green',label:'Low (5)'},{month:'Jan 2026',score:5,badge:'b-green',label:'Low (5)'}] },
+};
+
+const RISK_FACTORS = [
+  { group:'💼 Career & Growth', name:'Promotion expectation unmet', mandatory:true, key:'f1' },
+  { group:'💼 Career & Growth', name:'Skill growth / learning opportunity', mandatory:false, key:'f2' },
+  { group:'💰 Compensation', name:'Salary dissatisfaction', mandatory:true, key:'f3' },
+  { group:'💰 Compensation', name:'External offer / counter-offer risk', mandatory:true, key:'f4' },
+  { group:'🏢 Org Disconnect', name:'Team / manager relationship issues', mandatory:false, key:'f5' },
+  { group:'🏢 Org Disconnect', name:'Project / role fitment', mandatory:false, key:'f6' },
+  { group:'🧠 Disciplinary & Performance', name:'Attendance / behavioral concerns', mandatory:true, key:'f7' },
+  { group:'🏠 Personal Circumstances', name:'Personal stress / life events', mandatory:false, key:'f8' },
+];
+
+const HR_EMPLOYEES = ['EMP001','EMP002','EMP010','EMP014'];
+const HR_ACTIONS = {
+  EMP001: { status:'In Progress', target:'Apr 15, 2026', type:'Retention Discussion', timeline:[
+    {dot:'red', title:'HR Notified (Auto)', meta:'Apr 05, 2026 · System', body:'Auto-created on submission. Score = 1 triggered immediate HR notification via Power Automate.'},
+    {dot:'cyan', title:'Initial Call — Manager + HR', meta:'Apr 06, 2026 · Anjali Patel', body:'Discussion with Rajesh Sharma. Compensation gap confirmed at 22%. Retention package options to be explored.'},
+    {dot:'amber', title:'Skip-Level Meeting Scheduled', meta:'Apr 08, 2026 · Anjali Patel', body:'DGM Sanjay Kumar to meet Vikas Pandey directly on Apr 10.'},
+  ]},
+  EMP002: { status:'Open', target:'Apr 20, 2026', type:'Career Pathing', timeline:[
+    {dot:'amber', title:'HR Notified (Auto)', meta:'Apr 04, 2026 · System', body:'HR flag triggered on submission. Assigned to Anjali Patel.'},
+    {dot:'cyan', title:'Introductory Call Done', meta:'Apr 07, 2026 · Anjali Patel', body:'Career aspirations discussed. Role switch to Cloud track explored.'},
+  ]},
+  EMP010: { status:'Open', target:'Apr 18, 2026', type:'Retention Discussion', timeline:[
+    {dot:'red', title:'HR Notified (Auto)', meta:'Apr 04, 2026 · System', body:'Score 1 detected — immediate HR notification sent to Anjali Patel.'},
+    {dot:'amber', title:'Manager Briefed', meta:'Apr 05, 2026 · Anjali Patel', body:'Deepak Kumar briefed on urgency. Relocation policy reviewed with HR Ops.'},
+  ]},
+  EMP014: { status:'Closed', target:'Apr 08, 2026', type:'Counseling', timeline:[
+    {dot:'red', title:'HR Notified (Auto)', meta:'Apr 03, 2026 · System', body:'Score 1 on Personal Factors and Career triggered auto-notification.'},
+    {dot:'cyan', title:'Counseling Session', meta:'Apr 05, 2026 · Anjali Patel', body:'Personal situation discussed empathetically. Temporary WFH arrangement approved.'},
+    {dot:'green', title:'Action Closed', meta:'Apr 08, 2026 · Anjali Patel', body:'WFH arrangement in place. Employee confirmed improved sentiment. Monitoring monthly.'},
+  ]},
+};
+
+// ═══════════════════════════════════════
+// NAVIGATION & STATE
+// ═══════════════════════════════════════
+let currentRole = 'manager';
+let currentEmpId = null;
+let ooOn = true;
+let hrOn = false;
+
+function selectRole(el) {
+  document.querySelectorAll('.role-opt').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+  currentRole = el.dataset.role;
+}
+
+function doLogin() {
+  hideAll();
+  if (currentRole === 'hr') {
+    show('screen-hr');
+    renderHRTable();
+  } else if (currentRole === 'admin') {
+    show('screen-admin');
+  } else if (currentRole === 'leadership') {
+    show('screen-leadership');
+  } else {
+    show('screen-manager');
+    showMgrTab('home');
+    renderSpanTable();
+  }
+}
+
+function doLogout() {
+  hideAll();
+  show('screen-login');
+}
+
+function hideAll() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+}
+
+function show(id) {
+  document.getElementById(id).classList.add('active');
+}
+
+function showMgrTab(tab) {
+  document.getElementById('mgr-home').style.display = tab === 'home' ? 'block' : 'none';
+  document.getElementById('mgr-span').style.display = tab === 'span' ? 'block' : 'none';
+  document.getElementById('mgr-nav-home').classList.toggle('active', tab === 'home');
+  document.getElementById('mgr-nav-span').classList.toggle('active', tab === 'span');
+  if (tab === 'span') renderSpanTable();
+}
+
+function switchToHR() {
+  hideAll();
+  currentRole = 'hr';
+  show('screen-hr');
+  renderHRTable();
+}
+
+// ═══════════════════════════════════════
+// SPAN TABLE
+// ═══════════════════════════════════════
+function riskBadge(emp) {
+  if (!emp.riskScore) return '<span class="badge b-gray">—</span>';
+  if (emp.riskScore === 1) return '<span class="badge b-red b-dot">High (1)</span>';
+  if (emp.riskScore === 3) return '<span class="badge b-amber b-dot">Medium (3)</span>';
+  return '<span class="badge b-green b-dot">Low (5)</span>';
+}
+function statusBadge(s) {
+  if (s === 'Submitted') return '<span class="badge b-blue">Submitted</span>';
+  if (s === 'Draft') return '<span class="badge b-gray">Draft</span>';
+  return '<span class="badge b-gray b-dot">Pending</span>';
+}
+
+function renderSpanTable(filter={}) {
+  const tbody = document.getElementById('span-tbody');
+  if (!tbody) return;
+  let rows = '';
+  Object.entries(EMPLOYEES).forEach(([id, e]) => {
+    if (e.lead !== 'Rajesh Sharma' && e.mgr !== 'Rajesh Sharma') return;
+    if (filter.text && !e.name.toLowerCase().includes(filter.text) && !id.toLowerCase().includes(filter.text)) return;
+    if (filter.status && e.status !== filter.status) return;
+    if (filter.risk && e.risk !== filter.risk) return;
+    const needAction = e.status !== 'Submitted';
+    const actionBtn = needAction
+      ? `<button class="btn btn-cyan btn-xs" onclick="event.stopPropagation();openAssessment('${id}')">Score →</button>`
+      : `<button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openAssessment('${id}')">View</button>`;
+    rows += `<tr onclick="openAssessment('${id}')">
+      <td><code>${id}</code></td>
+      <td><div style="display:flex;align-items:center;gap:8px;"><div class="p-avatar" style="width:26px;height:26px;font-size:9.5px;background:var(--cyan-light);color:var(--navy);">${e.name.split(' ').map(w=>w[0]).join('')}</div>${e.name}</div></td>
+      <td>${e.desig}</td>
+      <td>${e.sub}</td>
+      <td>${e.lead}</td>
+      <td>${statusBadge(e.status)}</td>
+      <td>${riskBadge(e)}</td>
+      <td>${e.hrFlag ? '<span class="notif-dot"></span> Yes' : '—'}</td>
+      <td>${e.oo ? '✅' : '❌'}</td>
+      <td style="font-size:11px;color:var(--gray-400);">${e.lastUpdated}</td>
+      <td>${actionBtn}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = rows;
+}
+
+function filterSpanTable(val) { renderSpanTable({text: val.toLowerCase()}); }
+function filterSpanByStatus(v) { renderSpanTable({status: v}); }
+function filterSpanByRisk(v) { renderSpanTable({risk: v}); }
+function filterSpan(type) { showMgrTab('span'); setTimeout(()=>filterSpanByRisk(type==='high'?'High':type==='medium'?'Medium':type==='low'?'Low':''),100); }
+
+// ═══════════════════════════════════════
+// HR TABLE
+// ═══════════════════════════════════════
+function renderHRTable() {
+  const tbody = document.getElementById('hr-tbody');
+  if (!tbody) return;
+  let rows = '';
+  HR_EMPLOYEES.forEach(id => {
+    const e = EMPLOYEES[id];
+    const a = HR_ACTIONS[id];
+    const statusBadgeHR = a.status === 'Closed' ? 'b-green' : a.status === 'In Progress' ? 'b-amber' : 'b-gray';
+    rows += `<tr onclick="openHRAction('${id}')">
+      <td><code>${id}</code></td>
+      <td>${e.name}</td>
+      <td>${e.desig}</td>
+      <td>${e.tower} · ${e.sub}</td>
+      <td>${e.mgr}</td>
+      <td>${riskBadge(e)}</td>
+      <td>${e.hrFlag ? '<span class="notif-dot"></span> Yes' : 'No'}</td>
+      <td><span class="badge ${statusBadgeHR}">${a.status}</span></td>
+      <td style="font-size:11px;">${a.target}</td>
+      <td><button class="btn btn-primary btn-xs" onclick="event.stopPropagation();openHRAction('${id}')">Action →</button></td>
+    </tr>`;
+  });
+  tbody.innerHTML = rows;
+}
+
+// ═══════════════════════════════════════
+// ASSESSMENT
+// ═══════════════════════════════════════
+function openAssessment(empId) {
+  currentEmpId = empId;
+  const e = EMPLOYEES[empId];
+  hideAll();
+  show('screen-assessment');
+
+  // Lock banner
+  document.getElementById('lock-banner').style.display = e.locked ? 'flex' : 'none';
+  if (e.locked) document.getElementById('lock-date').textContent = e.lockDate;
+
+  // Disable inputs if locked
+  const formEls = document.querySelectorAll('#screen-assessment input, #screen-assessment select, #screen-assessment textarea, #screen-assessment button.toggle-switch');
+  formEls.forEach(el => { if (!el.closest('.back-btn') && !el.closest('.nav-user')) { el.disabled = e.locked; } });
+  document.getElementById('submit-btn').disabled = e.locked;
+  document.getElementById('draft-btn').disabled = e.locked;
+  if (e.locked) {
+    document.getElementById('submit-note').textContent = '🔒 Submitted and locked for Apr 2026.';
+  } else {
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('draft-btn').disabled = false;
+    document.getElementById('submit-note').textContent = 'Once submitted, this record will be locked for Apr 2026.';
+  }
+
+  // Employee card
+  document.getElementById('emp-disp-name').textContent = e.name;
+  document.getElementById('emp-disp-meta').innerHTML =
+    `EMP ID: <strong>${empId}</strong> · ${e.desig}<br>Sub Process: <strong>${e.sub}</strong><br>Account Lead: <strong>${e.acct}</strong><br>Tower Lead: <strong>${e.tower}</strong><br>Manager: <strong>${e.mgr}</strong>`;
+
+  // 1:1
+  ooOn = e.oo;
+  const ooToggle = document.getElementById('oo-toggle');
+  ooToggle.classList.toggle('on', ooOn);
+  document.getElementById('oo-label').textContent = ooOn ? '1:1 Completed ✓' : '1:1 Not Yet Done';
+  document.getElementById('oo-date-row').style.display = ooOn ? 'flex' : 'none';
+  document.getElementById('oo-warn').style.display = ooOn ? 'none' : 'flex';
+  if (e.ooDate) document.getElementById('oo-date').value = e.ooDate ? '2026-04-03' : '';
+
+  // Render risk factors
+  renderFactors(e);
+
+  // Stack
+  document.getElementById('perf-range').value = e.perf;
+  document.getElementById('beh-range').value = e.beh;
+  document.getElementById('perf-disp').textContent = e.perf + ' / 5';
+  document.getElementById('beh-disp').textContent = e.beh + ' / 5';
+  document.getElementById('bucket-select').value = e.bucket;
+  updateSidebarStack(e.perf, e.beh, e.bucket);
+
+  // HR intervention
+  hrOn = e.hrIntv;
+  document.getElementById('hr-toggle').classList.toggle('on', hrOn);
+  document.getElementById('hr-notes-section').style.display = hrOn ? 'block' : 'none';
+  if (hrOn) document.getElementById('hr-notes-input').value = e.hrNotes;
+
+  // Score
+  calcScoreFromFactors(e.factors);
+
+  // History
+  let histHtml = '';
+  e.history.forEach(h => { histHtml += `<div class="hist-row"><span>${h.month}</span><span class="badge ${h.badge}">${h.label}</span></div>`; });
+  document.getElementById('hist-panel').innerHTML = histHtml;
+
+  // Scoring body state
+  const sb = document.getElementById('scoring-body');
+  sb.style.opacity = ooOn ? '1' : '0.4';
+  sb.style.pointerEvents = (ooOn && !e.locked) ? 'auto' : 'none';
+}
+
+function renderFactors(emp) {
+  const groups = {};
+  RISK_FACTORS.forEach(f => { (groups[f.group] = groups[f.group] || []).push(f); });
+  let html = '';
+  Object.entries(groups).forEach(([grp, factors]) => {
+    html += `<div style="margin-bottom:18px;"><div class="factor-group-title">${grp}</div>`;
+    factors.forEach(f => {
+      const score = (emp.factors && emp.factors[f.key]) || 5;
+      const comment = (emp.comments && emp.comments[f.key]) || '';
+      const tag = f.mandatory ? `<span class="factor-tag">comment if 1</span>` : '';
+      html += `<div class="factor-row">
+        <div class="factor-name">${f.name} ${tag}</div>
+        <div class="score-radios">
+          <input type="radio" name="${f.key}" id="${f.key}s1" value="1" class="score-radio s1" ${score===1?'checked':''} onchange="onScoreChange()">
+          <label for="${f.key}s1" class="score-radio-label">1</label>
+          <input type="radio" name="${f.key}" id="${f.key}s3" value="3" class="score-radio s3" ${score===3?'checked':''} onchange="onScoreChange()">
+          <label for="${f.key}s3" class="score-radio-label">3</label>
+          <input type="radio" name="${f.key}" id="${f.key}s5" value="5" class="score-radio s5" ${score===5?'checked':''} onchange="onScoreChange()">
+          <label for="${f.key}s5" class="score-radio-label">5</label>
+        </div>
+      </div>`;
+      if (f.mandatory) {
+        const show1 = score === 1;
+        html += `<div id="comment-${f.key}" class="comment-row" style="display:${show1?'block':'none'}">
+          <div class="comment-input-wrap">
+            <div class="comment-req-label">⚠️ Comment required (Score = 1)</div>
+            <input type="text" placeholder="Explain the reason for High risk score..." value="${comment}">
+          </div>
+        </div>`;
+      }
+    });
+    html += `</div>`;
+  });
+  document.getElementById('scoring-body').innerHTML = html;
+}
+
+function onScoreChange() {
+  const scores = {};
+  RISK_FACTORS.forEach(f => {
+    const checked = document.querySelector(`input[name="${f.key}"]:checked`);
+    if (checked) scores[f.key] = parseInt(checked.value);
+    if (f.mandatory) {
+      const commentDiv = document.getElementById('comment-' + f.key);
+      if (commentDiv) commentDiv.style.display = (scores[f.key] === 1) ? 'block' : 'none';
+    }
+  });
+  calcScoreFromFactors(scores);
+  updateStepIndicator();
+}
+
+function calcScoreFromFactors(factors) {
+  const vals = Object.values(factors || {});
+  let finalScore = 5;
+  if (vals.includes(1)) finalScore = 1;
+  else if (vals.includes(3)) finalScore = 3;
+  const el = document.getElementById('score-disp-val');
+  const badge = document.getElementById('score-disp-badge');
+  if (!el) return;
+  if (finalScore === 1) { el.textContent = 1; el.style.color = 'var(--red)'; badge.className = 'badge b-red b-dot'; badge.textContent = 'High Risk'; }
+  else if (finalScore === 3) { el.textContent = 3; el.style.color = 'var(--amber)'; badge.className = 'badge b-amber b-dot'; badge.textContent = 'Medium Risk'; }
+  else { el.textContent = 5; el.style.color = 'var(--green)'; badge.className = 'badge b-green b-dot'; badge.textContent = 'Low Risk'; }
+}
+
+function updateSidebarStack(perf, beh, bucket) {
+  document.getElementById('perf-bar').style.width = (perf/5*100) + '%';
+  document.getElementById('beh-bar').style.width = (beh/5*100) + '%';
+  document.getElementById('perf-num').textContent = perf;
+  document.getElementById('beh-num').textContent = beh;
+  document.getElementById('bucket-chip').textContent = bucket;
+}
+
+function updateStack(type, val) {
+  const v = parseInt(val);
+  if (type === 'perf') { document.getElementById('perf-disp').textContent = v + ' / 5'; document.getElementById('perf-bar').style.width = (v/5*100)+'%'; document.getElementById('perf-num').textContent = v; }
+  else { document.getElementById('beh-disp').textContent = v + ' / 5'; document.getElementById('beh-bar').style.width = (v/5*100)+'%'; document.getElementById('beh-num').textContent = v; }
+  const bucket = document.getElementById('bucket-select')?.value || 'Core Performer';
+  document.getElementById('bucket-chip').textContent = bucket;
+}
+
+function toggleOO() {
+  if (document.getElementById('oo-toggle').disabled) return;
+  ooOn = !ooOn;
+  document.getElementById('oo-toggle').classList.toggle('on', ooOn);
+  document.getElementById('oo-label').textContent = ooOn ? '1:1 Completed ✓' : '1:1 Not Yet Done';
+  document.getElementById('oo-date-row').style.display = ooOn ? 'flex' : 'none';
+  document.getElementById('oo-warn').style.display = ooOn ? 'none' : 'flex';
+  const sb = document.getElementById('scoring-body');
+  sb.style.opacity = ooOn ? '1' : '0.4';
+  sb.style.pointerEvents = ooOn ? 'auto' : 'none';
+  updateStepIndicator();
+}
+
+function toggleHR() {
+  if (document.getElementById('hr-toggle').disabled) return;
+  hrOn = !hrOn;
+  document.getElementById('hr-toggle').classList.toggle('on', hrOn);
+  document.getElementById('hr-notes-section').style.display = hrOn ? 'block' : 'none';
+}
+
+function updateStepIndicator() {
+  const step1done = ooOn;
+  const step2done = !!document.querySelector('#scoring-body input[type=radio]:checked');
+  document.getElementById('step1-dot').className = 'step-dot ' + (step1done ? 'done' : 'active');
+  document.getElementById('step1-dot').textContent = step1done ? '✓' : '1';
+  document.getElementById('step12-line').className = 'step-line ' + (step1done ? 'done' : '');
+  document.getElementById('step2-dot').className = 'step-dot ' + (step2done ? 'done' : step1done ? 'active' : 'todo');
+  document.getElementById('step2-dot').textContent = step2done ? '✓' : '2';
+}
+
+function submitAssessment() {
+  if (!ooOn) { showToast('⛔ Please complete the 1:1 before submitting','error'); return; }
+  showToast('✅ Assessment submitted and locked for Apr 2026','success');
+  document.getElementById('lock-banner').style.display = 'flex';
+  document.getElementById('lock-date').textContent = 'Apr 08, 2026';
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('draft-btn').disabled = true;
+  document.getElementById('submit-note').textContent = '🔒 Submitted and locked for Apr 2026.';
+  document.querySelectorAll('#screen-assessment input, #screen-assessment select, #screen-assessment textarea, #screen-assessment button.toggle-switch').forEach(el => el.disabled = true);
+  if (currentEmpId && EMPLOYEES[currentEmpId]) {
+    EMPLOYEES[currentEmpId].status = 'Submitted';
+    EMPLOYEES[currentEmpId].locked = true;
+  }
+}
+
+function goBackFromAssess() {
+  hideAll();
+  show('screen-manager');
+  showMgrTab('span');
+  renderSpanTable();
+}
+
+// ═══════════════════════════════════════
+// HR ACTION
+// ═══════════════════════════════════════
+function openHRAction(empId) {
+  if (!empId) empId = HR_EMPLOYEES[0];
+  currentEmpId = empId;
+  const e = EMPLOYEES[empId];
+  const a = HR_ACTIONS[empId];
+  hideAll();
+  show('screen-hr-action');
+
+  document.getElementById('hr-action-header').innerHTML = `
+    <div class="page-header">
+      <div class="page-title-wrap">
+        <div class="page-title">HR Action — ${e.name}</div>
+        <div class="page-sub">${empId} · ${e.desig} · ${e.sub} · Manager: ${e.mgr}</div>
+      </div>
+      <div class="page-actions"><span class="badge b-red b-dot" style="font-size:12px;">Score ${e.riskScore} — ${e.risk} Risk</span></div>
+    </div>`;
+
+  const factorLines = Object.entries(e.factors||{}).map(([k,v]) => {
+    const f = RISK_FACTORS.find(rf=>rf.key===k);
+    const badge = v===1?'b-red':v===3?'b-amber':'b-green';
+    const comment = e.comments?.[k] ? `<span style="font-size:11px;color:var(--gray-400);"> — "${e.comments[k]}"</span>` : '';
+    return `<div style="font-size:12px;line-height:2;color:var(--gray-800);">${f?f.name:k}: <strong class="badge ${badge}" style="font-size:10px;">${v}</strong>${comment}</div>`;
+  }).join('');
+
+  document.getElementById('hr-action-submission').innerHTML = `
+    <div class="emp-card" style="margin-bottom:14px;">
+      <div class="emp-card-name">${e.name}</div>
+      <div class="emp-card-meta">${empId} · ${e.desig} · ${e.sub}<br>Manager: <strong>${e.mgr}</strong> · 1:1: <strong>${e.ooDate || 'Done'}</strong></div>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:14px;">
+      <div class="score-box" style="margin:0;flex:0 0 120px;">
+        <div class="score-box-label">Final Score</div>
+        <div class="score-box-value" style="font-size:42px;color:${e.riskScore===1?'var(--red)':e.riskScore===3?'var(--amber)':'var(--green)'};">${e.riskScore}</div>
+        <div class="score-box-status"><span class="badge ${e.riskScore===1?'b-red':e.riskScore===3?'b-amber':'b-green'} b-dot">${e.risk} Risk</span></div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:var(--gray-600);margin-bottom:6px;">Factor Breakdown</div>
+        ${factorLines}
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Manager Notes (Read Only)</label>
+      <textarea class="form-textarea" readonly style="background:var(--gray-50);">${e.hrNotes}</textarea>
+    </div>`;
+
+  let tlHtml = '<div class="timeline">';
+  (a.timeline || []).forEach(t => {
+    tlHtml += `<div class="tl-item"><div class="tl-dot ${t.dot}"></div><div class="tl-title">${t.title}</div><div class="tl-meta">${t.meta}</div><div class="tl-body">${t.body}</div></div>`;
+  });
+  tlHtml += '</div>';
+  document.getElementById('hr-action-timeline').innerHTML = tlHtml;
+  document.getElementById('action-status-select').value = a.status;
+}
+
+function goBackFromHRAction() {
+  hideAll();
+  show('screen-hr');
+  renderHRTable();
+}
+
+// ═══════════════════════════════════════
+// ADMIN TABS
+// ═══════════════════════════════════════
+function selectAdminTab(tab) {
+  ['span','factors','mapping'].forEach(t => {
+    document.getElementById('atab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('admin-panel-'+t).style.display = t===tab ? 'block' : 'none';
+  });
+}
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+let toastTimer;
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  const colors = { success:'var(--green)', error:'var(--red)', info:'var(--navy)' };
+  t.style.background = colors[type] || colors.info;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderSpanTable();
+});
+</script>
+</body>
+</html>
